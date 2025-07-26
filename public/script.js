@@ -22,5 +22,12 @@ async function uploadImage() {
   const data = await response.json();
   loading.style.display = 'none';
 
-  result.textContent = `Category: ${data.category}\n\nExtracted Text:\n${data.text}`;
+//   result.textContent = `Category: ${data.category}\n\nExtracted Text:\n${data.text}`;
+    result.textContent =
+    `Category: ${data.category}\n` +
+    `Vendor: ${data.vendor}\n` +
+    `Date: ${data.date}\n` +
+    `Total: ₹${data.total}\n\n` +
+    `Items:\n` +
+    data.items.map(i => `- ${i.name}: ₹${i.price}`).join('\n');
 }
