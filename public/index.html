@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bill Categorizer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="slds-p-around_x-large">
+  <h1>Upload a Bill</h1>
+  <input class="slds-m-top_medium" type="file" id="imageUpload" accept="image/*">
+  <button class="slds-m-top_medium" onclick="uploadImage()">Submit</button>
+
+  <div id="loading" style="display:none;">Processing...</div>
+  <pre id="result"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html>

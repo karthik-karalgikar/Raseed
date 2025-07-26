@@ -1,0 +1,11 @@
+# Ignore node_modules
+server/node_modules/
+
+# Ignore environment files
+server/.env
+
+# Ignore service account keys
+server/service-account.json
+
+# Ignore uploads if it's user content
+server/uploads/
