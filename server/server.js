@@ -14,10 +14,13 @@ const auth = new GoogleAuth({
 });
 
 const app = express();
+app.use(express.json());
 const upload = multer({ dest: 'uploads/' });
 
 // Serve frontend files
 app.use(express.static(__dirname + '/../public'));
+
+let latestPass = null;
 
 // Initialize Google Vision client
 const visionClient = new vision.ImageAnnotatorClient({
@@ -60,6 +63,40 @@ function extractBillFields(text, category) {
     total
   };
 }
+
+app.post('/ask', async (req, res) => {
+  const userQuestion = req.body.question;
+
+  if (!latestPass) {
+    return res.status(400).json({ error: "No receipt available to query. Please upload a bill first." });
+  }
+
+  const prompt = `
+You are an AI assistant helping a user understand their receipt.
+
+Receipt details:
+Vendor: ${latestPass.vendor}
+Date: ${latestPass.date}
+Total: ₹${latestPass.total}
+Category: ${latestPass.category}
+Items: 
+${latestPass.items.map(i => `- ${i.name}: ₹${i.price}`).join('\n')}
+
+User question: "${userQuestion}"
+
+Answer in a helpful and clear way.
+`;
+
+  try {
+    const result = await model.generateContent([prompt]);
+    const response = await result.response;
+    const answer = await response.text();
+    res.json({ answer });
+  } catch (err) {
+    console.error("Gemini error:", err);
+    res.status(500).json({ error: "Failed to get response from Gemini." });
+  }
+});
 
 app.post('/process', upload.single('image'), async (req, res) => {
   console.log('Received image upload');
@@ -117,6 +154,8 @@ app.post('/process', upload.single('image'), async (req, res) => {
 
     // Clean up
     fs.unlinkSync(imagePath);
+
+    latestPass = structuredData;
 
     res.json({ ...structuredData, saveUrl });
   } catch (err) {
