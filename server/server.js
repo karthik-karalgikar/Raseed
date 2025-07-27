@@ -20,7 +20,7 @@ const upload = multer({ dest: 'uploads/' });
 // Serve frontend files
 app.use(express.static(__dirname + '/../public'));
 
-let latestPass = null;
+let allPasses = [];
 
 // Initialize Google Vision client
 const visionClient = new vision.ImageAnnotatorClient({
@@ -64,27 +64,82 @@ function extractBillFields(text, category) {
   };
 }
 
+// app.post('/ask', async (req, res) => {
+//   const userQuestion = req.body.question;
+
+//   if (!latestPass) {
+//     return res.status(400).json({ error: "No receipt available to query. Please upload a bill first." });
+//   }
+
+//   const prompt = `
+// You are an AI assistant helping a user understand their receipt.
+
+// Receipt details:
+// Vendor: ${latestPass.vendor}
+// Date: ${latestPass.date}
+// Total: ₹${latestPass.total}
+// Category: ${latestPass.category}
+// Items: 
+// ${latestPass.items.map(i => `- ${i.name}: ₹${i.price}`).join('\n')}
+
+// User question: "${userQuestion}"
+
+// Answer in a helpful and clear way.
+// `;
+
+//   try {
+//     const result = await model.generateContent([prompt]);
+//     const response = await result.response;
+//     const answer = await response.text();
+//     res.json({ answer });
+//   } catch (err) {
+//     console.error("Gemini error:", err);
+//     res.status(500).json({ error: "Failed to get response from Gemini." });
+//   }
+// });
+
 app.post('/ask', async (req, res) => {
   const userQuestion = req.body.question;
+  const language = req.body.language;
 
-  if (!latestPass) {
-    return res.status(400).json({ error: "No receipt available to query. Please upload a bill first." });
+  if (!allPasses.length) {
+    return res.status(400).json({ error: "No receipts available yet." });
   }
 
-  const prompt = `
-You are an AI assistant helping a user understand their receipt.
+  // Build a prompt with all passes
+  const receiptList = allPasses.map((pass, index) => {
+    return `
+Receipt ${index + 1}:
+Vendor: ${pass.vendor}
+Date: ${pass.date}
+Category: ${pass.category}
+Total: ₹${pass.total}
+Items:
+${pass.items.map(i => `- ${i.name}: ₹${i.price}`).join('\n')}
+    `.trim();
+  }).join('\n\n');
 
-Receipt details:
-Vendor: ${latestPass.vendor}
-Date: ${latestPass.date}
-Total: ₹${latestPass.total}
-Category: ${latestPass.category}
-Items: 
-${latestPass.items.map(i => `- ${i.name}: ₹${i.price}`).join('\n')}
+  const langMap = {
+    en: 'English',
+    hi: 'Hindi',
+    kn: 'Kannada',
+    ta: 'Tamil',
+    te: 'Telugu'
+  };
+
+  const languageInstruction = `Please answer in ${langMap[language] || 'English'}.`;
+    
+  const prompt = `
+You are an helpful AI assistant that helps users analyze their shopping receipts.
+Please never ever user asterisk symbol while giving your explanation.
+
+Receipts:
+${receiptList}
 
 User question: "${userQuestion}"
+${languageInstruction}
 
-Answer in a helpful and clear way.
+Give a clear and helpful answer based on the receipts.
 `;
 
   try {
@@ -114,7 +169,7 @@ app.post('/process', upload.single('image'), async (req, res) => {
     // console.log("Full text:", text);
 
     // 2. Gemini classification
-    const prompt = `Categorize the following receipt based on content (like Grocery, Restaurant, Electronics, etc):\n\n${text}`;
+    const prompt = `Categorize the following receipt based on content (like Grocery, Restaurant, Electronics, Medicines, Cosmetics, Bathroom/Shower essentials):\n\n${text}`;
     const resultGemini = await model.generateContent([prompt]);
     const response = await resultGemini.response;
     const rawCategory = response.text().trim();
@@ -155,9 +210,14 @@ app.post('/process', upload.single('image'), async (req, res) => {
     // Clean up
     fs.unlinkSync(imagePath);
 
-    latestPass = structuredData;
+    // latestPass = structuredData;
+    allPasses.push(structuredData);
+    console.log("Pass added. Total passes:", allPasses.length);
 
-    res.json({ ...structuredData, saveUrl });
+    //res.json({ ...structuredData, saveUrl });
+    // console.log("Sending response with notification:", notifyText);
+    res.json({ ...structuredData, saveUrl});
+
   } catch (err) {
     console.error("Error in /process:", err);
     res.status(500).json({ error: "Something went wrong", details: err.message });
@@ -278,7 +338,7 @@ async function createGenericObject(structuredData, objectId, classId) {
             value: structuredData.category
         }
     },
-    "barcode": {
+    barcode: {
     "type": "QR_CODE",
     "value": objectId
     },
