@@ -9,3 +9,6 @@ server/service-account.json
 
 # Ignore uploads if it's user content
 server/uploads/
+
+#Ignore readme
+README.md

@@ -20,9 +20,16 @@ header.app-bar {
   align-items: center;
 }
 
+.wallet-icon-big {
+  width: 150px;
+  height: auto;
+}
+
 .app-bar-content {
   display: flex;
   align-items: center;
+  width: 80%;
+  height: 200%;
 }
 
 .wallet-icon {
