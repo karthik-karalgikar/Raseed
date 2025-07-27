@@ -1,17 +1,158 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Bill Categorizer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="slds-p-around_x-large">
+<body>
   <h1>Upload a Bill</h1>
-  <input class="slds-m-top_medium" type="file" id="imageUpload" accept="image/*">
-  <button class="slds-m-top_medium" onclick="uploadImage()">Submit</button>
+  <input type="file" id="imageUpload" accept="image/*">
+  <button onclick="uploadImage()">Submit</button>
 
   <div id="loading" style="display:none;">Processing...</div>
   <pre id="result"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Wallet - Image Upload</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="app-bar">
+    <div class="app-bar-content">
+      <img src="Images/glg.png" alt="Google Wallet Icon" class="wallet-icon" />
+      <span class="logo-text">Google <span class="wallet-highlight">Wallet</span></span>
+    </div>
+  </header>
+ 
+  <main>
+    <section class="upload-card">
+      <h1>Upload Image to Wallet</h1>
+      <p>Choose an image to categorize and save as a pass.</p>
+      
+      <form>
+        <input type="file" id="imageUpload" accept="image/*" />
+        <label for="imageUpload" class="custom-upload-btn">Choose Image</label>
+        <button type="button" class="submit-btn" onclick="uploadImage()">Submit</button>
+      </form>
+
+      <div id="loading" style="display:none;">Processing...</div>
+      <div id="result" class="result-container"></div>
+    </section>
+  </main>
+
+  <div class="chat-box">
+  <h3>Ask about your receipt</h3>
+  <input type="text" id="userQuery" placeholder="e.g. Do I need to buy milk?" />
+  <button onclick="askAssistant()">Ask</button>
+  <p id="assistantResponse"></p>
+
+  <select id="language">
+  <option value="en">English</option>
+  <option value="hi">Hindi</option>
+  <option value="kn">Kannada</option>
+  <option value="ta">Tamil</option>
+  <option value="te">Telugu</option>
+  </select>
+
+  </div>
+
+  <footer>
+    &copy; 2025 Google Wallet Clone. All rights reserved.
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bill Categorizer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Upload a Bill</h1>
+  <input type="file" id="imageUpload" accept="image/*">
+  <button onclick="uploadImage()">Submit</button>
+
+  <div id="loading" style="display:none;">Processing...</div>
+  <pre id="result"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Wallet - Image Upload</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="notification" class="notification-banner"></div>
+  <header class="app-bar">
+    <div class="app-bar-content">
+      <img src="Images/glg.png" alt="Google Wallet Icon" class="wallet-icon" />
+      <span class="logo-text">Google <span class="wallet-highlight">Wallet</span></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="upload-card">
+      <h1>Upload Image to Wallet</h1>
+      <p>Choose an image to categorize and save as a pass.</p>
+      
+      <form>
+        <input type="file" id="imageUpload" accept="image/*" />
+        <label for="imageUpload" class="custom-upload-btn">Choose Image</label>
+        <button type="button" class="submit-btn" onclick="uploadImage()">Submit</button>
+      </form>
+
+      <div id="loading" style="display:none;">Processing...</div>
+      <div id="result" class="result-container"></div>
+    </section>
+  </main>
+
+  <div class="chat-box">
+  <h3>Ask about your receipt</h3>
+  <input type="text" id="userQuery" placeholder="e.g. Do I need to buy milk?" />
+  <button onclick="askAssistant()">Ask</button>
+  <p id="assistantResponse"></p>
+
+  <select id="language">
+  <option value="en">English</option>
+  <option value="hi">Hindi</option>
+  <option value="kn">Kannada</option>
+  <option value="ta">Tamil</option>
+  <option value="te">Telugu</option>
+  </select>
+
+  </div>
+
+  <footer>
+    &copy; 2025 Google Wallet Clone. All rights reserved.
+  </footer>
 
   <script src="script.js"></script>
 </body>
